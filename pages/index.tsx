@@ -74,7 +74,6 @@
 import React from 'react';
 import { gql } from '@apollo/client';
 import client from '../apollo-client';
-import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
 export async function getStaticProps() {
@@ -96,10 +95,10 @@ export async function getStaticProps() {
     },
   };
 }
-export default function Home({ countries }) {
+export default function Home({ countries }: any) {
   return (
     <div className={styles.grid}>
-      {countries.map((country) => (
+      {countries.map((country: any) => (
         <div key={country.code} className={styles.card}>
           <h3>
             <a
