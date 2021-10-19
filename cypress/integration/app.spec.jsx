@@ -1,5 +1,5 @@
-import cy from 'cypress';
-import { it, describe } from 'mocha';
+// import cy from 'cypress';
+// import { it, describe } from 'mocha';
 
 describe('Navigation', () => {
   it('should navigate to the about page', () => {
