@@ -41,6 +41,11 @@
     "strict": true,
     "target": "es2018"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "cypress/integration/app.spec.jsx"
+  ],
   "exclude": ["node_modules"]
 }

@@ -70,11 +70,15 @@
 // };
 
 // export default Home;
-
 import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-  const [state, setState] = React.useState();
-
-  return <div>Home</div>;
+  return (
+    <nav>
+      <Link href="/about">
+        <a>About</a>
+      </Link>
+    </nav>
+  );
 }
