@@ -2,9 +2,9 @@
 import React from 'react';
 import '../styles/globals.css';
 // import type { AppProps } from 'next/app';
-// import { ApolloProvider } from '@apollo/client';
-// import client from '../apollo-client';
-// import AuthProvider from '../utils/AuthProvider';
+import { ApolloProvider } from '@apollo/client';
+import client from '../apollo-client';
+import AuthProvider from '../utils/AuthProvider';
 // import Head from 'next/head';
 // import { ThemeProvider } from '@material-ui/core/styles';
 // import CssBaseline from '@material-ui/core/CssBaseline';
@@ -38,11 +38,11 @@ function MyApp({ Component, pageProps }: any) {
     //   <ThemeProvider theme={theme}>
     //     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     //     <CssBaseline />
-    //     <AuthProvider>
-    //       <ApolloProvider client={client}>
-    <Component {...pageProps} />
-    //       </ApolloProvider>
-    //     </AuthProvider>
+    <AuthProvider>
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    </AuthProvider>
     //   </ThemeProvider>
     // </React.Fragment>
   );
