@@ -46,6 +46,6 @@
     "**/*.ts",
     "**/*.tsx",
     "cypress/integration/app.spec.jsx"
-  ],
+, "pages/_document.tsx.old"  ],
   "exclude": ["node_modules"]
 }
