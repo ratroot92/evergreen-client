@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // pages/client-side.js
 import React from 'react';
 import Head from 'next/head';
