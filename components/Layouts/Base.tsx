@@ -8,12 +8,12 @@ interface IProps {
 
 export default function Base({ Component }: IProps) {
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row">
         <div className="col-md-12">
           <Header />
         </div>
-        <div className="col-md-12 p-5 ">
+        <div className="col-md-12 ">
           <div className="row products-wrapper" style={{}}>
             <Component />
           </div>

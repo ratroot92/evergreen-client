@@ -1,76 +1,30 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-
+import * as FaIcons from 'react-icons/fa'
+import { AppContext } from '../../context/appContext';
 export default function Header() {
+  const { store,setState }: any = React.useContext(AppContext)
+ 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="#">
-        Evergreen
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Shop <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              Link
-            </a>
-          </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">
-                Action
-              </a>
-              <a className="dropdown-item" href="#">
-                Another action
-              </a>
-              <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="#">
-                Something else here
-              </a>
-            </div>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link disabled" href="#">
-              Disabled
-            </a>
-          </li>
-        </ul>
-        <form className="form-inline my-2 my-lg-0">
-          {/* <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> */}
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Search
-          </button>
-        </form>
+    <div className='row'>
+      <div className='col-lg-3 col-md-12 col-sm-12 border d-flex flex-row justify-content-center align-items-center' >
+        <h4>EVERGREEN</h4>
       </div>
-    </nav>
+      <div className='col-lg-6 col-md-12 col-sm-12'>
+        <ul className='list-inline list d-flex flex-row justify-content-between align-items-baseline'>
+          <li className='list-group-item border border-0 '>DryFruits</li>
+          <li className='list-group-item border border-0 '>Condiments</li>
+          <li className='list-group-item border border-0 '>Dates</li>
+          <li className='list-group-item border border-0 '>Others</li>
+
+          
+        </ul>
+      </div>
+      <div className='col-lg-3 col-md-12 col-sm-12 border d-flex flex-row justify-content-center align-items-center' >
+        <div className="bg-success w-50 p-2 d-flex flex-row justify-content-center align-items-center">
+          <span className="text-white d-flex flex-row justify-content-center align-items-center border border-white" style={{ borderRadius: "50%", height: "30px", width: "30px" }}>{store.products.length}</span>
+          <FaIcons.FaShoppingCart color="yellow" size={40} /></div>
+      </div>
+   </div>
   );
 }

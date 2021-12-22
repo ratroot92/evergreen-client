@@ -4,43 +4,43 @@ import { useRouter } from 'next/router';
 import { getStaticProps } from '..';
 
 import React from 'react';
+import ProductCard from '../../components/Shop/ProductCard';
 
-// export async function getStaticProps() {
-//   const { cat } = router.query;
-//   const res: any = await axios.get(`http://localhost:8080/api/v1/category/${cat}`);
-//   if (res.status === 200) {
-//     return {
-//       props: {
-//         categories: res.data,
-//       },
-//     };
-//   }
-// }
-
-export default function Products() {
+export default function CategoryProduct() {
   const router = useRouter();
   const { cat } = router.query;
 
   const [state, setState] = React.useState<any>([]);
   React.useEffect(() => {
-    (async function () {
-      const response: any = await axios.get(
-        `http://0.0.0.0:8080/api/v1/category/${cat}`
-      );
-      if (response.status === 200) {
-        setState(response.data);
-      }
-    })();
+    if (cat) {
+      (async function () {
+        const response: any = await axios.get(
+          `http://0.0.0.0:8080/api/v1/category/${cat}`
+        );
+        if (response.status === 200) {
+          setState(response.data);
+        }
+      })();
+    }
+    else {
+      router.back()
+    }
+  
   }, []);
 
   return (
     <div className="container">
       <div className="row">
+        <div className='col-md-12 text-center '>
+          <h3>Category : {state.name}</h3>
+        </div>
         {state &&
           state.products &&
           state.products.length &&
           state.products.map((product: any) => (
-            <div key={product._id}>{product.name}</div>
+            <div key={product.id} className='col-lg-3 col-md-6 col-sm-12' >
+            <ProductCard product={product}/>
+            </div>
           ))}
       </div>
     </div>
