@@ -1,8 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import userService from '../../../services/auth.service';
 import validationService from '../../../services/validation.service';
-
+import { AuthContext } from '../../../utils/AuthProvider';
+import { useRouter } from 'next/router'
 // import './index.css';
 const useYupValidationResolver = (validationSchema: any) =>
   React.useCallback(
@@ -38,50 +40,52 @@ const useYupValidationResolver = (validationSchema: any) =>
 const validationSchema = yup.object({
   username: yup
     .string()
-    .email()
     .email('Invalid email')
     .required('Required')
-    .test('Unique Email', 'Email already in use', async function (value) {
+    .test('email', 'Email already in use', async function (value) {
       try {
-        const res = await validationService.isAdminEmailValid(value);
-        console.log('email exists =>', res);
-        if (res.exists) return true;
+        if (value === "") return false
+        const { msg, exists } = await validationService.isAdminEmailValid(value);
+        if (exists) return true;
         return false;
       } catch (err) {
         return false;
       }
-      // .then((res) => {
-      //   console.log(res);
-      //   if (res.data.msg === 'Username already been taken') {
-      //     resolve(false);
-      //   }
-      //   resolve(true);
-      // });
-      // });
     }),
   password: yup
     .string()
     .min(8, 'Not allowed')
-    .max(8, 'Not allowed')
+    .max(25, 'Not allowed')
     .required('Required'),
 });
 function AdminLogin() {
+
+  const authContext = React.useContext(AuthContext);
+  const router = useRouter()
   const {
     register,
     handleSubmit,
-    // formState: { errors },
+    formState: { errors },
   } = useForm({
     resolver: useYupValidationResolver(validationSchema),
     defaultValues: {
       username: 'alice@evergreen.com',
-      password: 'alice@henderson',
+      password: 'alicehenderson',
     },
   });
   const onSubmit = async (data: any) => {
-    console.log(data);
+    try {
+      const res = await userService.login(data)
+      localStorage.setItem("access_token", res);
+      authContext.setIsAuthenticated(true);
+      authContext.setUser(data);
+      router.push('/admin/dashboard')
+    }
+    catch (err: any) {
+      console.log(err.message)
+    }
   };
 
-  //   console.log(errors);
 
   return (
     <div className="row">
@@ -98,10 +102,14 @@ function AdminLogin() {
                   User Name
                 </label>
                 <input
-                  className="form-control"
+                  type="email"
+                  required
+                  className="form-control form-control-sm"
                   placeholder="Bill"
                   {...register('username')}
                 />
+                {errors?.username ? (<small className="text-danger">{errors.username.message}</small>) : (<small className="text-success">valid!</small>)}
+
               </div>
 
               <div className="col-md-12 mt-2 mb-2 ">
@@ -109,10 +117,12 @@ function AdminLogin() {
                   Password
                 </label>
                 <input
-                  className="form-control"
+                  required
+                  className="form-control form-control-sm"
                   type="password"
                   {...register('password')}
                 />
+                {errors?.password ? (<small className="text-danger">{errors.password.message}</small>) : (<small className="text-success">valid!</small>)}
               </div>
             </div>
 

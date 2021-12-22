@@ -4,7 +4,7 @@ const validationService = {
   isAdminEmailValid: async (email: string) => {
     try {
       console.log(process.env);
-      const res: any = await api.post('/users/validate', { email });
+      const res: any = await api.post('/users/validate/email', { email });
       return res.data;
     } catch (err: any) {
       throw new Error(handleErrors(err));
