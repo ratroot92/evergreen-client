@@ -76,62 +76,114 @@
 import React from 'react';
 import { gql } from '@apollo/client';
 import client from '../apollo-client';
+import { Grid, ListItemText } from '@material-ui/core';
 import styles from '../styles/Home.module.css';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+import ProductCard from '../components/Shop/ProductCard';
+import Base from '../components/Layouts/Base';
+import CategoryCard from '../components/Shop/CategoryCard';
 
 export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
-      query Countries {
-        countries {
-          code
-          name
-          emoji
-        }
-      }
-    `,
-  });
-
-  return {
-    props: {
-      countries: data.countries.slice(0, 4),
-    },
-  };
+  const res: any = await axios.get('http://localhost:8080/api/v1/category');
+  if (res.status === 200) {
+    return {
+      props: {
+        categories: res.data,
+      },
+    };
+  }
 }
 
-export default function Home({ countries }: any) {
+const Products = ({ products, cols = 12 }: any) => {
   return (
-    <div></div>
-    // <div className={styles.grid}>
-    //   {countries.map((country: any) => (
-    //     <div key={country.code} className={styles.card}>
-    //       <h3>
-    //         <a
-    //           href="#country-name"
-    //           aria-hidden="true"
-    //           className="aal_anchor"
-    //           id="country-name"
-    //         >
-    //           <svg
-    //             aria-hidden="true"
-    //             className="aal_svg"
-    //             height="16"
-    //             version="1.1"
-    //             viewBox="0 0 16 16"
-    //             width="16"
-    //           >
-    //             <path
-    //               fillRule="evenodd"
-    //               d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
-    //             ></path>
-    //           </svg>
-    //         </a>
-    //         {country.name}
-    //       </h3>
-    //       <p>
-    //         {country.code} - {country.emoji}
-    //       </p>
-    //     </div>
-    //   ))}
-    // </div>
+    <React.Fragment>
+      {products &&
+        products.map((product: any) => {
+          return (
+            <div key={product._id} className={`col-md-${cols}`}>
+              <ProductCard
+                key={`productCard_${product._id}`}
+                product={product}
+              />
+            </div>
+          );
+        })}
+    </React.Fragment>
   );
+};
+
+export default function Home({ categories }: any) {
+  const CategoriesProduct = () => {
+    return (
+      <>
+        {categories.map((cat: any) => {
+          return (
+            <React.Fragment key={cat._id}>
+              <h3>{cat.name}</h3>
+              <Products products={cat.products.slice(0, 3)} cols={4} />
+            </React.Fragment>
+          );
+        })}
+      </>
+    );
+  };
+
+  const TopCategories = () => {
+    return (
+      <div className="row">
+        <div className="col-md-12 text-center mt-5 mb-5">
+          <h3 className="text-success">Top Categories</h3>
+        </div>
+        {categories.map((cat: any) => {
+          return (
+            <div
+              key={cat._id}
+              className="col-md-3 "
+              style={{ height: '300px' }}
+            >
+              <CategoryCard category={cat} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const BestSelling = () => {
+    return (
+      <div className="row">
+        <div className="col-md-12 text-center mt-5 mb-5 ">
+          <h3 className="text-success">Best Selling</h3>
+        </div>
+        {categories.map((cat: any) => {
+          return (
+            <div
+              key={cat._id}
+              className="col-md-3 "
+              style={{ height: '300px' }}
+            >
+              <CategoryCard category={cat} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const Content = () => {
+    return (
+      <>
+        <TopCategories />
+        <BestSelling />
+        <CategoriesProduct />
+      </>
+    );
+  };
+  return <Base Component={() => <Content />}></Base>;
 }
