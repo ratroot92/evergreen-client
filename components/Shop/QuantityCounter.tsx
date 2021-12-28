@@ -1,14 +1,20 @@
-import React from 'react'
-export default function QuantityCounter() {
+import React, { FunctionComponent } from 'react'; // importing FunctionComponent
+
+interface IQuantityCounter{
+    quantity:number,
+    setQuantity:Function,
+}
+
+    const  QuantityCounter:FunctionComponent<IQuantityCounter>=({quantity,setQuantity}) =>{
 
 
 
 
 
-    const [counter, setCounter] = React.useState<number>(0);
+  
     const increment = () => {
         try {
-            setCounter( counter + 1)
+            setQuantity( quantity + 1)
         }
         catch (err:any) {
             console.log(err.message)
@@ -16,8 +22,8 @@ export default function QuantityCounter() {
     }
     const decrement = () => {
         try {
-            if (counter !== 0) {
-            setCounter( counter - 1)
+            if (quantity !== 0) {
+            setQuantity( quantity - 1)
             }
         }
         catch (err:any) {
@@ -29,9 +35,13 @@ export default function QuantityCounter() {
 
     return (
         <div className='d-flex flex-row justify-content-center align-items-center'>
-            <button type="button" onClick={increment} style={{ width: "40px", height: "40px" }}>+</button>
-            <input min={0} type="number" id={"counterInput"} value={counter} onChange={(e)=>console.log(e.target.value)} style={{ width: "60px", height: "40px" }} />
             <button onClick={decrement} type="button" style={{ width: "40px", height: "40px" }}>-</button>
+            <input min={0} type="number" id={"counterInput"} value={quantity} onChange={(e)=>console.log(e.target.value)} style={{ width: "60px", height: "40px" }} />
+            <button type="button" onClick={increment} style={{ width: "40px", height: "40px" }}>+</button>
+
         </div>
     )
 }
+
+
+export default QuantityCounter

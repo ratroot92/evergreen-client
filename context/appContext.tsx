@@ -3,21 +3,28 @@
 import React from 'react';
 
 import { useMethods } from 'react-use';
+import { ICartProduct } from '../types/product';
 
 
 
-interface ICart {
+export interface ICart {
     [key: string]: any;
 }
-interface ICartContext {
+export interface ICartContext {
     methods: any;
     store: any;
     
 }
 
+export interface IInitialState{
+    cartProducts: ICartProduct[],
+    totalPrice:number
+}
 
-const initialState = {
-  products: [],
+
+const initialState:IInitialState = {
+  cartProducts: [],
+  totalPrice:0
 };
 
 function createMethods(store:any) {
@@ -28,16 +35,22 @@ function createMethods(store:any) {
     cartReducer(action:{type:string,payload:any}) {
         switch (action.type) {
             case "ADD_TO_CART":
+            console.log("action",action)
                 return {
                 ...store,
-                products:store.products.concat(action.payload)
+                cartProducts:store.cartProducts.concat(action.payload)
                 }
             case "REMOVE_FROM_CART":
-                console.log(action)
                     return {
                     ...store,
-                    products:store.products.filter((prod:any)=>prod._id!==action.payload)
+                    cartProducts:store.cartProducts.filter((prod:ICartProduct)=>prod._id!==action.payload)
                     }
+            
+                    case "UPDATE_TOTAL_PRICE":
+                        return {
+                        ...store,
+                        totalPrice:action.payload,
+                        }
             default:
                 return {...store}
       }
@@ -48,25 +61,43 @@ function createMethods(store:any) {
 
 
 
+
+export const ACTIONS = {
+    CART_ACTIONS: {
+        UPDATE_TOTAL_PRICE: "UPDATE_TOTAL_PRICE",
+        REMOVE_FROM_CART: "REMOVE_FROM_CART",
+        ADD_TO_CART: "ADD_TO_CART"
+    }
+
+}
+
 export const AppContext = React.createContext<ICartContext | any>(
     initialState,
 ) as React.Context<ICartContext>;
 
 const AppProvider = ({ children }: any) => {
     const [store, methods] = useMethods(createMethods, initialState);
-    // const [store, methods] = React.useState<ICart>({
-    //     products: [],
-    // });
-    const [loading,setLoading]=React.useState(true)
+    const [loading,setLoading]=React.useState<boolean>(true)
 
 
     React.useEffect(() => {
+
         setLoading(false)   
-    },[])
+    }, [])
+    
 
+/** Calculate Total Price Start  */
     React.useEffect(() => {
-        console.log("store changed ==>",{store})
-   },[store])
+        if (store.cartProducts.length) {
+           const totalPrice:number= store.cartProducts.reduce<number>(function (totalPrice: number, product: ICartProduct) {
+               totalPrice += product.selectedVariant.price * product.selectedQuantity;
+               return totalPrice
+            },0)
+           methods.cartReducer({action:ACTIONS.CART_ACTIONS.UPDATE_TOTAL_PRICE,payload:totalPrice})
+        }
+    }, [store.cartProducts])
+/** Calculate Total Price Start  */
+    
    
     return (
 
