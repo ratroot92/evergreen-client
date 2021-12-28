@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+import React,{FunctionComponent} from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { ACTIONS, AppContext } from '../../context/appContext';
 import { ICartProduct, IProduct, IProductVariant } from '../../types/product';
@@ -10,15 +10,84 @@ interface IProps {
   product: IProduct;
 }
 
+
+
+interface IProductCardImage{
+  coverImage: string,
+  salePrice:number
+}
+
+const ProductCardImage: FunctionComponent<IProductCardImage> = ({ coverImage,salePrice }) => {
+  const style = {
+    height:"inherit",
+    width: "100%",
+    padding: "1px",
+    borderRadius: "5px",
+    position:"relative" as 'relative'
+  }
+  return <>
+    <ProductCardPriceBanner salePrice={salePrice} />
+    
+    <img
+  className="img-fluid"
+  alt={coverImage}
+  src={coverImage}
+  style={style}
+  />
+    </>
+}
+
+
+
+interface IProductCardPriceBanner{
+  salePrice:number
+}
+
+const ProductCardPriceBanner: FunctionComponent<IProductCardPriceBanner> = ({ salePrice }) => {
+  const style = {
+    height: "30px",
+    width: "125px",
+    // zIndex:999,
+    top: "20px",
+    left:"12px",
+    borderRadius: "3px 5px 5px 3px ",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    fontWeight: 500,
+    fontSize:"14px",
+    display:"flex",
+    backgroundColor: "green",
+    position: 'absolute' as 'absolute', // cast string to type 'absolute'
+    // border: "1px solid black",
+    
+  }
+  return <span style={style}>Rs {salePrice} Only</span>
+}
+
+
+
+
 export default function ProductCard({ product }: IProps) {
   const { store, methods } = React.useContext(AppContext);
   const [isAddedToCart, setIsAddedToCart] = React.useState<Boolean>(false);
-  const [cartItem, setCartItem] = React.useState<any>({});
+  const [cartProduct, setCartProduct] = React.useState<ICartProduct>();
   const [variant, setVariant] = React.useState<any>(undefined);
   const [quantity,setQuantity]=React.useState<number>(0);
 
 
+  /** Style Start  */
+  const cardWrapper = {
+    // borderRadius: "5px",
+    border:"1px solid green",
+    padding: "10px",
+    backgroundColor:"white"
+  }
+  /** Style End   */
 
+  
+  
+  
 
   React.useEffect(() => {
     if (store.cartProducts.length) {
@@ -28,7 +97,7 @@ export default function ProductCard({ product }: IProps) {
       foundInCart === undefined
         ? setIsAddedToCart(false)
         : setIsAddedToCart(true);
-      setCartItem(foundInCart);
+      setCartProduct(foundInCart);
     } else {
       setIsAddedToCart(false);
     }
@@ -56,35 +125,43 @@ export default function ProductCard({ product }: IProps) {
     }
   };
   return (
-    <div className="card">
-      <div className="card-header m-0 p-0" style={{ height: '200px' }}>
-        <img
-          className="img-fluid"
-          alt={product.name}
-          src={product.media.coverImage}
-          style={{ height: 'inherit', width: '100%' }}
-        />
+    <div className="card" style={cardWrapper}>
+      <div className="card-img m-0 p-0" style={{ height: 'auto' }}>
+        <ProductCardImage coverImage={product.media.coverImage} salePrice={product.price.salePrice}/>
       </div>
       <div className="card-body   m-0 p-0 ">
         <div className="row ">
-          <div className='col-md-12'>
+          <div className="col-md-12 d-flex flex-row justify-content-around align-items-center p-2  ">
+            {
+              product.variants.map((variant: IProductVariant) => {
+                return (<span key={variant._id} className="badge text-dark border border-success">{variant.quantity} GM</span>)
+                
+              })
+            }
+          </div>
+          <div className='col-md-12 mb-2  'style={{height:"50px"}} >
         {!isAddedToCart ? (
-              <React.Fragment>
+              <div className="row">
+                <div className="col-md-6 ">
                 <QuantityCounter quantity={quantity} setQuantity={setQuantity} />
+                </div>
+                <div className="col-md-6   ">
                 <VariantSelector setVariant={setVariant} variant={variant}  productVariants={product.variants}/>
-              </React.Fragment>
-          ) : (
-              <div className='d-flex flex-column justify-content-start align-items-start '>
-                  <span className="badge text-dark">Quantity : {cartItem.selectedVariant.quantity} GM </span>
-                  <span className="badge text-dark">Units : {cartItem.selectedQuantity}  </span>
-                  
-              <span className="badge text-dark">Price : {cartItem.selectedVariant.price * cartItem.selectedQuantity} </span>
+                </div>
               </div>
+          ) : (<div className="row"></div>
+              // <div className='d-flex flex-column justify-content-start align-items-start '>
+              //     <span className="badge text-dark">Quantity : {cartProduct?.selectedVariant?.quantity} GM </span>
+              //     <span className="badge text-dark">Units : {cartProduct?.selectedQuantity}  </span>
+                  
+              // <span className="badge text-dark">Price : {cartProduct?.selectedVariant?.price * cartProduct?.selectedQuantity} </span>
+              // </div>
             )}
             </div>
         </div>
       </div>
-      <div className={`card-footer bg-${!isAddedToCart?'success':'warning'}   pt-0 pb-0  `}>
+      {/* <div className={`card-footer bg-${!isAddedToCart?'success':'warning'}   pt-0 pb-0  `}> */}
+      <div className={`card-footer bg-${!isAddedToCart?'white':'white'}   pt-2 pb-0  `}>
 
             {!isAddedToCart ? (
               <button

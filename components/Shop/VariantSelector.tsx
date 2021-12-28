@@ -14,8 +14,7 @@ const  VariantSelector:FunctionComponent<IVariantSelector>=({ setVariant, varian
     setVariant(productVariants[0]._id)
   },[])
     return (
-        <div className="d-flex flex-row justify-content-around align-items-center">
-         <label htmlFor="variantSelector">Quantity</label>
+        <div className=" h-100 w-100  d-flex flex-row justify-content-around align-items-center">
         <select
           value={variant}
           className="form-control form-control-sm"
@@ -29,7 +28,7 @@ const  VariantSelector:FunctionComponent<IVariantSelector>=({ setVariant, varian
                     }
                   }}
                   id="variantSelector"
-                  style={{ width: '100px' }}
+                  style={{ width: '100%',textAlign:"right" }}
                 >
           {productVariants.map((variant: any, index: any) => {
                     return (

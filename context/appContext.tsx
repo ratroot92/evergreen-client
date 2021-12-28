@@ -46,7 +46,8 @@ function createMethods(store:any) {
                     cartProducts:store.cartProducts.filter((prod:ICartProduct)=>prod._id!==action.payload)
                     }
             
-                    case "UPDATE_TOTAL_PRICE":
+            case "UPDATE_TOTAL_PRICE":
+                console.log("action",action)
                         return {
                         ...store,
                         totalPrice:action.payload,
@@ -93,7 +94,7 @@ const AppProvider = ({ children }: any) => {
                totalPrice += product.selectedVariant.price * product.selectedQuantity;
                return totalPrice
             },0)
-           methods.cartReducer({action:ACTIONS.CART_ACTIONS.UPDATE_TOTAL_PRICE,payload:totalPrice})
+           methods.cartReducer({type:ACTIONS.CART_ACTIONS.UPDATE_TOTAL_PRICE,payload:totalPrice})
         }
     }, [store.cartProducts])
 /** Calculate Total Price Start  */

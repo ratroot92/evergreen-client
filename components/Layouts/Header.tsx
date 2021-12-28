@@ -4,7 +4,7 @@ import React from 'react';
 import * as FaIcons from 'react-icons/fa'
 import { AppContext } from '../../context/appContext';
 import CartModal from '../../components/Modal/CartModal'
-import Cart from '../../components/Cart'
+import Cart from '../Cart/CartProductsTable'
 export default function Header() {
   const { store,setState }: any = React.useContext(AppContext)
   const [showModal, setShowModal] = React.useState<boolean>(false);

@@ -34,10 +34,10 @@ interface IQuantityCounter{
 
 
     return (
-        <div className='d-flex flex-row justify-content-center align-items-center'>
-            <button onClick={decrement} type="button" style={{ width: "40px", height: "40px" }}>-</button>
-            <input min={0} type="number" id={"counterInput"} value={quantity} onChange={(e)=>console.log(e.target.value)} style={{ width: "60px", height: "40px" }} />
-            <button type="button" onClick={increment} style={{ width: "40px", height: "40px" }}>+</button>
+        <div className=" h-100 w-100 d-flex flex-row justify-content-center align-items-center ">
+            <button onClick={decrement} className="btn   bg-warning m-0 p-0 " type="button" style={{ width: "40px", height: "40px" , color:"black",fontSize:25,fontWeight:900}}>-</button>
+            <input min={0} type="number" id={"counterInput"} className="form-control" value={quantity} onChange={(e)=>console.log(e.target.value)} style={{ width: "60px", height: "40px",margin:"5px" }} />
+            <button className="btn  m-0 p-0  bg-success" type="button" onClick={increment} style={{ width: "40px", height: "40px" , color:"white",fontSize:25,fontWeight:900}}>+</button>
 
         </div>
     )

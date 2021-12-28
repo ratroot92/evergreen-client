@@ -41,7 +41,7 @@ const Products:FunctionComponent<IProducts>= (props) => {
       {products &&
         products.map((product: IProduct) => {
           return (
-            <div key={product._id} className={`col-lg-4 col-md-6 col-sm-12`}>
+            <div key={product._id} className={`col-lg-3 col-md-4 col-sm-12 mb-2`}>
               <ProductCard
                 key={`productCard_${product._id}`}
                 product={product}
@@ -67,8 +67,11 @@ interface IHome{
         {categories.map((cat: ICategory) => {
           return (
             <React.Fragment key={cat._id}>
-              <h3>{cat.name}</h3>
-              <Products products={cat.products.slice(0, 3)} cols={4} />
+             
+                <div className="col-md-12 border text-center p-3">
+                  <h4 className="text-uppercase">{cat.name}</h4>
+              </div>
+              <Products products={cat.products.slice(0, 8)} cols={4} />
             </React.Fragment>
           );
         })}
