@@ -13,14 +13,19 @@ export default function ProductCard({ product }: IProps) {
   const { store, methods } = React.useContext(AppContext);
   const [isAddedToCart, setIsAddedToCart] = React.useState<Boolean>(false);
   const [cartItem, setCartItem] = React.useState<any>({});
+  const [productQuantity, setProductQuantity] = React.useState<number>(0);
   const [variant, setVariant] = React.useState<any>({
     isSelected: true,
     variant: product.variants[0].variant,
   });
 
+  // React.useEffect(() => {
+  //   console.log(productQuantity);
+  // }, [productQuantity]);
 
-
-
+  React.useEffect(() => {
+    console.log('variant', variant);
+  }, [variant]);
 
   React.useEffect(() => {
     if (store.products.length) {
@@ -55,7 +60,8 @@ export default function ProductCard({ product }: IProps) {
         <img
           className="img-fluid"
           alt={product.name}
-          src={product.media.coverImage}
+          // src={product.media.coverImage}
+          src="https://media.istockphoto.com/photos/red-apple-with-leaf-isolated-on-white-background-picture-id185262648?b=1&k=20&m=185262648&s=170667a&w=0&h=2ouM2rkF5oBplBmZdqs3hSOdBzA4mcGNCoF2P0KUMTM="
           style={{ height: 'inherit', width: '100%' }}
         />
       </div>
@@ -70,8 +76,59 @@ export default function ProductCard({ product }: IProps) {
           <div className="col-md-6 d-flex flex-column justify-content-center align-items-center ">
             {!isAddedToCart ? (
               <React.Fragment>
-                <QuantityCounter/>        
-                <VariantSelector setVariant={setVariant}  productVariants={product.variants}/>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <button
+                    // onClick={()=>console.log())}
+                    type="button"
+                    style={{ width: '40px', height: '40px' }}
+                  >
+                    -
+                  </button>
+                  <input
+                    min={0}
+                    type="number"
+                    id={'counterInput'}
+                    // value={counter}
+                    onChange={(e) => console.log(e.target.value)}
+                    style={{ width: '60px', height: '40px' }}
+                  />
+
+                  <button
+                    type="button"
+                    // onClick={increment}
+                    style={{ width: '40px', height: '40px' }}
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="d-flex flex-row justify-content-around align-items-center">
+                  <label htmlFor="variantSelector">Quantity</label>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        if (productQuantity === 0) {
+                          alert('Select quantity');
+                        } else {
+                          setVariant({
+                            isSelected: true,
+                            variant: e.target.value,
+                          });
+                        }
+                      }
+                    }}
+                    id="variantSelector"
+                    className="form-control"
+                    style={{ width: '100px' }}
+                  >
+                    {product.variants.map((variant: any, index: any) => {
+                      return (
+                        <option key={index} value={variant.quantity}>
+                          {variant.quantity}-{variant.unit}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </React.Fragment>
             ) : (
               <span className="badge text-dark">{variant.variant} gm</span>
