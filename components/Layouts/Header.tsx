@@ -1,10 +1,13 @@
+/* eslint-disable react/no-children-prop */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import * as FaIcons from 'react-icons/fa'
 import { AppContext } from '../../context/appContext';
+import CartModal from '../../components/Modal/CartModal'
+import Cart from '../Cart/CartProductsTable'
 export default function Header() {
   const { store,setState }: any = React.useContext(AppContext)
- 
+  const [showModal, setShowModal] = React.useState<boolean>(false);
   return (
     <div className='row'>
       <div className='col-lg-3 col-md-12 col-sm-12 border d-flex flex-row justify-content-center align-items-center' >
@@ -22,8 +25,13 @@ export default function Header() {
       </div>
       <div className='col-lg-3 col-md-12 col-sm-12 border d-flex flex-row justify-content-center align-items-center' >
         <div className="bg-success w-50 p-2 d-flex flex-row justify-content-center align-items-center">
-          <span className="text-white d-flex flex-row justify-content-center align-items-center border border-white" style={{ borderRadius: "50%", height: "30px", width: "30px" }}>{store.products.length}</span>
-          <FaIcons.FaShoppingCart color="yellow" size={40} /></div>
+          <span onClick={() => setShowModal(true)} className="text-white d-flex flex-row justify-content-center align-items-center border border-white" style={{ borderRadius: "50%", height: "30px", width: "30px" }}>{store.cartProducts.length}</span>
+          <FaIcons.FaShoppingCart color="yellow" size={40} />
+          <CartModal
+            // children={()=><Cart />}
+            onClose={() => setShowModal(false)}
+            show={showModal}  title={"Cart"}       />
+        </div>
       </div>
    </div>
   );

@@ -1,9 +1,13 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+
+import React, { FunctionComponent } from 'react'; // importing FunctionComponent
+
 import axios from 'axios';
 import ProductCard from '../components/Shop/ProductCard';
 import Base from '../components/Layouts/Base';
-import TopCategories from '../components/Home/TopCategories';
-import BestSelling from '../components/Home/BestSelling';
+import CategoryCard from '../components/Shop/CategoryCard';
+import { ICategory } from '../types/category';
+import { IProduct } from '../types/product';
 import CategoriesProduct from '../components/Home/CategoriesProduct';
 
 export async function getStaticProps() {
@@ -32,33 +36,64 @@ export async function getStaticProps() {
   }
 }
 
-const Products = ({ products }: any) => {
-  return (
-    <React.Fragment>
-      {products &&
-        products.map((product: any) => {
+interface IHome {
+  categories: ICategory[];
+}
+const Home: FunctionComponent<IHome> = (props) => {
+  const { categories } = props;
+
+  const TopCategories: FunctionComponent = () => {
+    return (
+      <div className="row">
+        <div className="col-md-12 text-center mt-5 mb-5">
+          <h3 className="text-success">Top Categories</h3>
+        </div>
+        {categories.map((cat: ICategory) => {
           return (
-            <div key={product._id} className={`col-lg-4 col-md-6 col-sm-12`}>
-              <ProductCard
-                key={`productCard_${product._id}`}
-                product={product}
-              />
+            <div
+              key={cat._id}
+              className="col-lg-3 col-md-6 col-sm-12 "
+              style={{ height: '300px' }}
+            >
+              <CategoryCard category={cat} />
             </div>
           );
         })}
-    </React.Fragment>
-  );
-};
+      </div>
+    );
+  };
 
-export default function Home({ categories }: any) {
+  const BestSelling: FunctionComponent = () => {
+    return (
+      <div className="row">
+        <div className="col-md-12 text-center mt-5 mb-5 ">
+          <h3 className="text-success">Best Selling</h3>
+        </div>
+        {categories.map((cat: ICategory) => {
+          return (
+            <div
+              key={cat._id}
+              className="col-lg-3 col-md-6 col-sm-12"
+              style={{ height: '300px' }}
+            >
+              <CategoryCard category={cat} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const Content = () => {
     return (
       <>
-        <TopCategories categories={categories} />
-        <BestSelling categories={categories} />
+        {/* <TopCategories />
+        <BestSelling /> */}
         <CategoriesProduct categories={categories} />
       </>
     );
   };
   return <Base Component={() => <Content />}></Base>;
-}
+};
+
+export default Home;
