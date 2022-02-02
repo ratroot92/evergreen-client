@@ -31,7 +31,17 @@ const CartModal = ({ show, onClose, children, title }: any) => {
   
   const verifyNumber = () => {
     try {
-        console.log("number verificcation ")
+      console.log("number verificcation ");
+      setNumberVerified(true)
+    }
+    catch (err:any) {
+      console.log(err.message)
+    }
+  }
+
+  const placeOrder = () => {
+    try {
+      console.log("placing order")
     }
     catch (err:any) {
       console.log(err.message)
@@ -52,18 +62,24 @@ const CartModal = ({ show, onClose, children, title }: any) => {
             <div className="col-md-12 text-center ">
               {checkout ? (
                 <div className="row">
-                  <div className="col-md-12 border">
-                    <div className="d-flex flex-row justify-content-center align-items-center">
-                      
-                      <select value={code} onChange={(e:any)=>setCode(e.target.value)} className="form-control" name="mobileCode" id="mobileCode" style={{width:"80px",borderRadius:"0px",textAlign:"center"}}>
+                  <div className="col-md-12 ">
+                    {numberVerified ? (
+                    <div className="d-flex flex-column justify-content-center align-items-center">
+                        <p>0{code}-{mobileNumber}</p>
+                        <p>A SMS with order details will sent to your number.  </p>
+                        <p>Total Amount : RS {store.totalPrice }</p>
+                      </div>) : (
+                          <div className="d-flex flex-row justify-content-center align-items-center">
+                           <select value={code} onChange={(e:any)=>setCode(e.target.value)} className="form-control" name="mobileCode" id="mobileCode" style={{width:"80px",borderRadius:"0px",textAlign:"center"}}>
                         <option value="">Code</option>
                         {mobileCodesList.map((code: number,index:number) => {
                           return (<option value={code} key={code+index}>{`0${code}`}</option>)
                         })}
                       </select>
-                      <input value={mobileNumber} className="form-control" onChange={(e)=>setMobileNumber(e.target.value)} placeholder="Enter 7 digit number " type="text" minLength={7} maxlength={7} style={{width:"150px",borderRadius:"0px",textAlign:"center"}}/>
-                        <button onClick={verifyNumber} disabled={code && mobileNumber?.length===7?false:true} className="btn btn-sm btn-success">Verify Number</button>
-                    </div>
+                          <input value={mobileNumber} className="form-control" onChange={(e) => setMobileNumber(e.target.value)} placeholder="Enter 7 digit number " type="text" minLength={7} maxLength={7} style={{ width: "150px", borderRadius: "0px", textAlign: "center" }} />
+                         <button onClick={verifyNumber} disabled={code && mobileNumber?.length===7?false:true} className="btn btn-sm btn-success">Verify Number</button>
+                      </div> 
+                      )}
                   </div>
                  
               </div>
@@ -73,7 +89,7 @@ const CartModal = ({ show, onClose, children, title }: any) => {
             </div>
             <div className="col-md-12 text-center  ">
               {checkout ? (
-              <button className="btn btn-success " disabled={!numberVerified} onClick={()=>setCheckout(!checkout)} type="button">Place Order </button>
+              <button className="btn btn-success " onClick={placeOrder} disabled={!numberVerified} onClick={()=>setCheckout(!checkout)} type="button">Place Order </button>
 
               ): (
               <button className="btn btn-success " disabled={store.cartProducts.length===0?true:false} onClick={()=>setCheckout(!checkout)} type="button">Shop More </button>

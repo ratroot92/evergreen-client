@@ -15,7 +15,7 @@ export default function CategoryProduct() {
     if (cat) {
       (async function () {
         const response: any = await axios.get(
-          `http://0.0.0.0:8080/api/v1/category/${cat}`
+          `http://127.0.0.1:8080/api/v1/category/${cat}`
         );
         if (response.status === 200) {
           setState(response.data);
