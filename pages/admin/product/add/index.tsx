@@ -1,5 +1,10 @@
 import React from 'react';
+import AdminLayout from '../../../../components/Layouts/AdminLayout';
 
-export default function index() {
+ function AddProduct() {
   return <div>product add</div>;
 }
+
+
+AddProduct.Layout = AdminLayout
+export default AddProduct

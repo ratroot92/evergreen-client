@@ -1,5 +1,11 @@
 import React from 'react';
+import AdminLayout from '../../../components/Layouts/AdminLayout';
 
-export default function index() {
+ function Category() {
   return <div>Category</div>;
 }
+
+
+
+Category.Layout=AdminLayout
+export default Category

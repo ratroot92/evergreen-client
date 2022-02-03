@@ -7,7 +7,7 @@ import AppProvider from '../context/appContext';
 import AdminLayout from '../components/Layouts/AdminLayout';
 
 function EvergreenApp({ Component, pageProps }: any) {
-  const Layout = Component.Layout || AdminLay;
+  const Layout = Component.Layout?AdminLay: UserLayout;
   return (
     <AppProvider>
     <Layout>

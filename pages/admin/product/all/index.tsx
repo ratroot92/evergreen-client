@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react'; // importing FunctionComponent
 import dataServer from '../../../../services/axios.config';
 import { DataGrid ,} from '@mui/x-data-grid';
 import { IProduct } from '../../../../types/product';
+import AdminLayout from '../../../../components/Layouts/AdminLayout';
 
 export async function getStaticProps() {
   try {
@@ -34,8 +35,6 @@ interface IAllProducts {
 }
 const AllProducts: FunctionComponent<IAllProducts> = (props) => {
   const { products } = props;
-  console.log("products",products)
-
   // media: IProductMedia,
   // stats: IProductStats,
   // variants:IProductVariant,
@@ -62,5 +61,7 @@ const AllProducts: FunctionComponent<IAllProducts> = (props) => {
       </div>)
 }
 
+
+AllProducts.Layout = AdminLayout;
 
 export default AllProducts
