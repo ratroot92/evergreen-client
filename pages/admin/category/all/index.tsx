@@ -136,6 +136,7 @@ const AllCategories: FunctionComponent<IAllCategories> = (props) => {
   return (
     <div style={{ height: 300, width: '100%' }}>
       <MUIDataTable
+      title={"All Categories"}
         data={categories}
         columns={columns}
         options={options}
