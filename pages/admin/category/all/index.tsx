@@ -1,9 +1,12 @@
 import React, { FunctionComponent } from 'react'; // importing FunctionComponent
 import dataServer from '../../../../services/axios.config';
-import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import MUIDataTable from 'mui-datatables';
 import { ICategory } from '../../../../types/category';
 import Image from 'next/image';
+import * as FaIcons from 'react-icons/fa'
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
+import DeleteIcon from '../../../../components/Icons/DeleteIcon';
+import {NotificationManager} from 'react-notifications'
 export async function getStaticProps() {
   try {
     const res: any = await dataServer.get('/category');
@@ -39,78 +42,103 @@ interface IAllCategories {
 const AllCategories: FunctionComponent<IAllCategories> = (props) => {
   const { categories } = props;
 
-  // valueSetter: setFullName,
-  // function setFullName(params: GridValueSetterParams) {
-  //   const [firstName, lastName] = params.value!.toString().split(' ');
-  //   return { ...params.row, firstName, lastName };
-  // }
 
-  // function getFullName(params) {
-  //   return `${params.row.firstName || ''} ${params.row.lastName || ''}`;
-  // }
-  // valueGetter: getFullName,
 
-  const myLoader = ({ src, width, quality }: any) => {
-    return `https://example.com/${src}?w=${width}&q=${quality || 75}`;
-  };
+ /** Table Actions Start */ 
+ async  function deleteCategory(catId:string){
+    try{
+     const {data}= await dataServer.delete(`/category/${catId}`);
+     NotificationManager.success("success")
+    }
+    catch(err:any){
+      NotificationManager.error(err.message)
+    }
+  }
+ /** Table Actions End */ 
+
+
+
+
   const columns = [
     {
-      field: '_id',
-      headerName: 'Id',
-      width: 150,
-      minWidth: 150,
-      maxWidth: 200,
-    },
-    {
-      field: 'name',
-      headerName: 'Name',
-      width: 150,
-      minWidth: 150,
-      maxWidth: 200,
-    },
-    {
-      field: 'stock',
-      headerName: 'Stock',
-      width: 150,
-      minWidth: 150,
-      maxWidth: 200,
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      width: 150,
-      minWidth: 150,
-      maxWidth: 200,
-    },
-    {
-      field: 'coverImage',
-      headerName: 'Image',
-      width: 150,
-      minWidth: 150,
-      maxWidth: 200,
-      renderCell: (params: GridRenderCellParams<string>) => {
-        console.log('params', params, process.env);
-        return (
-          <Image
-            alt={params.value}
-            src={`${process.env.publicAssetsUrl}${params.value}`}
-            className="img-thumbnail"
-            height="40"
-            width="40"
-          />
-        );
+      name: '_id',
+      label: 'Id',
+      options: {
+        display: true,
+        filter: true,
+        customBodyRender: (value:string) => value,
       },
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      options: {
+        display: true,
+        filter: true,
+        customBodyRender: (value:string) => value,
+      },
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      options: {
+        display: true,
+        filter: true,
+        customBodyRender: (value:string) => value,
+      },
+    },
+    {
+      name: 'coverImage',
+      label: 'Image',
+      options: {
+        display: true,
+        filter: false,
+        customBodyRender:(value:string) => {
+          console.log(process.env.publicAssetsUrl, value);
+          return (
+            <Image
+              alt={value}
+              src={`${process.env.publicAssetsUrl}${value}`}
+              className="img-thumbnail"
+              height="100"
+              width="100"
+            />
+          );
+        },
+      },
+    
+    },
+    {
+      name: '_id',
+      label: 'Actions',
+      options: {
+        display: true,
+        filter: true,
+        customBodyRender:(value:string) => {
+          console.log(process.env.publicAssetsUrl, value);
+          return (
+         <button onClick={(e)=>deleteCategory(value)} className='iconWrapperBtn'><DeleteIcon/></button>
+          );
+        },
+      },
+    
     },
   ];
 
+  const options = {
+    filter: true,
+    filterType: "dropdown",
+    responsive: "standard"// ["standard","vertical","verticalAlways","simple"].
+
+};
+
+
   return (
     <div style={{ height: 300, width: '100%' }}>
-      <DataGrid
-        rows={categories}
+      <MUIDataTable
+        data={categories}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
+        options={options}
       />
     </div>
   );

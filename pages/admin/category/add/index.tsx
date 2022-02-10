@@ -6,47 +6,32 @@ import Label from '../../../../components/Forms/Label';
 import FormGroup from '../../../../components/Forms/FormGroup';
 import dataServer from '../../../../services/axios.config';
 import axios from 'axios';
-
+import { api } from '../../../../config/axios.config';
+import {NotificationManager} from 'react-notifications'
 function AddCategory() {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = async (formValues: any) => {
     try {
-      console.log('formValues.coverImage[0]', formValues.coverImage[0]);
-      console.log(
-        'formValues.coverImage[0]',
-        Object.keys(formValues.coverImage[0])
-      );
-
+       
       const fd = new FormData();
       fd.append('name', formValues.name);
       fd.append('description', formValues.description);
       fd.append('coverImage', formValues.coverImage[0]);
-      for (var p of fd.entries()) {
-        console.log(p);
-      }
-      await axios
-        .post(
-          `http://localhost:8080/api/v1/category`,
-          { data: fd },
-          { headers: { 'Content-Type': 'multipart/form-data' } }
-        )
-        .then((res: any) => {
-          console.log(res);
-        })
-        .catch((err: any) => {
-          console.log(err.message);
-        });
+      const {data} = await api.post(`/category`,fd);
+        NotificationManager.success("success");
+        reset()
     } catch (err: any) {
-      console.log(err.message);
+      NotificationManager.error(err.message);
+
     }
   };
 
-  // console.log(watch("name")); // watch input value by passing the name of it
 
   return (
     <div className="row">

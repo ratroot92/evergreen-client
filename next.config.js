@@ -3,9 +3,9 @@ const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
 
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_API_URL:  'http://0.0.0.0:8080/api/v1',
     publicAssetsUrl: 'http://0.0.0.0:8080',
 
   },

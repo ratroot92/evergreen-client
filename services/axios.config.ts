@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 const dataServer:any = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
+  baseURL: 'http://0.0.0.0:8080/api/v1',
   timeout: 100000000,
 //   headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 })
