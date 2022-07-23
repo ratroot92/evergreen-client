@@ -9,10 +9,17 @@ const userService = {
       throw new Error(handleErrors(err));
     }
   },
-  login: async (credentials: any) => {
+  login: async (payload: any) => {
     try {
-      const { username, password } = credentials;
-      const res: any = await api.post('/users/login', { username, password });
+      const res: any = await api.post('/auth/login', payload);
+      return res.data;
+    } catch (err: any) {
+      throw new Error(err.response);
+    }
+  },
+  verifyOtp: async (payload: any) => {
+    try {
+      const res: any = await api.post('/auth/otp', payload);
       return res.data;
     } catch (err: any) {
       throw new Error(handleErrors(err));

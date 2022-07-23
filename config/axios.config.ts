@@ -3,7 +3,7 @@ import axios from 'axios';
 // const { publicRuntimeConfig } = getConfig();
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_AUTH_SERVICE_API_URL,
   timeout: 100000000,
   headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 });

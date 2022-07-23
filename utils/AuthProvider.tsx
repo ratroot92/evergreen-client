@@ -3,6 +3,7 @@
 import React from 'react';
 import userService from '../services/auth.service';
 import ReactLoading from 'react-loading';
+import dataServer from '../services/axios.config';
 
 interface IUser {
   // username: string;
@@ -14,33 +15,32 @@ interface IUser {
 interface AuthContextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: any;
-  user: IUser;
-  setUser: any;
+  // user: IUser;
+  // setUser: any;
 }
-export const AuthContext = React.createContext<AuthContextProps | null>(
-  null
-) as React.Context<AuthContextProps>;
+export const AuthContext = React.createContext<AuthContextProps | null>(null) as React.Context<AuthContextProps>;
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = React.useState<IUser>({
-    // username: '',
-    // email: '',
-    // password: '',
-    // role: '',
-  });
+  // const [user, setUser] = React.useState<IUser>({
+  //   // username: '',
+  //   // email: '',
+  //   // password: '',
+  //   // role: '',
+  // });
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    userService
-      .isUserAuthenticated()
-      .then((response: any) => {
-        console.log(response);
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await dataServer.get(`/auth/isAuthenticated`);
+        console.log('response', response);
+      } catch (err) {
+        console.log(err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err: any) => {
-        console.log(err.message);
-        setLoading(false);
-      });
+      }
+    })();
   }, []);
   return (
     <div>
@@ -49,10 +49,10 @@ const AuthProvider = ({ children }) => {
       ) : (
         <AuthContext.Provider
           value={{
-            user,
+            // user,
             isAuthenticated,
             setIsAuthenticated,
-            setUser,
+            // setUser,
           }}
         >
           {children}
