@@ -1,9 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import userService from '../services/auth.service';
-import ReactLoading from 'react-loading';
 import dataServer from '../services/axios.config';
+import ReactLoader from '../components/Loader/ReactLoading';
 
 interface IUser {
   // username: string;
@@ -15,8 +14,9 @@ interface IUser {
 interface AuthContextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: any;
-  // user: IUser;
-  // setUser: any;
+  logout: any;
+  user: any;
+  setUser: any;
 }
 export const AuthContext = React.createContext<AuthContextProps | null>(null) as React.Context<AuthContextProps>;
 const AuthProvider = ({ children }) => {
@@ -28,31 +28,39 @@ const AuthProvider = ({ children }) => {
   // });
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const response = await dataServer.get(`/auth/isAuthenticated`);
-        console.log('response', response);
-      } catch (err) {
-        console.log(err);
+        setIsAuthenticated(response.data.data.isAuthenticated);
+      } catch (err: any) {
+        setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
     })();
   }, []);
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUser(null);
+    localStorage.clear();
+  };
   return (
     <div>
       {loading ? (
-        <ReactLoading color="#000" />
+        <ReactLoader />
       ) : (
         <AuthContext.Provider
           value={{
-            // user,
+            user,
             isAuthenticated,
             setIsAuthenticated,
-            // setUser,
+            logout,
+            setUser,
           }}
         >
           {children}

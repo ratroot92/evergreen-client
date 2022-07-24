@@ -2,22 +2,16 @@ import React from 'react';
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
 import { useForm } from 'react-hook-form';
 import FormLayout from '../../../../components/Layouts/FormLayout';
-import Label from '../../../../components/Forms/Label';
 import FormGroup from '../../../../components/Forms/FormGroup';
+import { NotificationManager } from 'react-notifications';
 import dataServer from '../../../../services/axios.config';
-import axios from 'axios';
-import { api } from '../../../../config/axios.config';
-import {NotificationManager} from 'react-notifications';
-import ReactDOM from 'react-dom';
 
 function AddProduct() {
-
-
-  const variantWrapperDiv=React.useRef(null)
-const [state,setState]=React.useState<any>({
-  variantCount:0,
-  variants:[]
-})
+  const variantWrapperDiv = React.useRef(null);
+  const [state, setState] = React.useState<any>({
+    variantCount: 0,
+    variants: [],
+  });
 
   const {
     register,
@@ -28,48 +22,43 @@ const [state,setState]=React.useState<any>({
   } = useForm();
   const onSubmit = async (formValues: any) => {
     try {
-       
       const fd = new FormData();
       fd.append('name', formValues.name);
       fd.append('description', formValues.description);
       fd.append('coverImage', formValues.coverImage[0]);
-      const {data} = await api.post(`/category`,fd);
-        NotificationManager.success("success");
-        reset()
+      const { data } = await dataServer.post(`/category`, fd);
+      NotificationManager.success('success');
+      reset();
     } catch (err: any) {
       NotificationManager.error(err.message);
-
     }
   };
 
-  const Variants=()=>{
-    const [state,setState]=React.useState({
-      isWeightSelected:false,
-      weight:0,
-      variantprice:0,
-    })
-    return (<div>
-      <select className=' selectSm' onChange={(e)=>({...state,isWeightSelected:true,wieight:+e.target.value})}>
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="250">250</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-      </select>
-      {state?.isWeightSelected?(
-        <input type="number" className='' onChange={(e)=>({...state,variantPrice:+e.target.value})}/>
-      ):(<></>)}
-     
-    </div>)
-  }
+  const Variants = () => {
+    const [state, setState] = React.useState({
+      isWeightSelected: false,
+      weight: 0,
+      variantprice: 0,
+    });
+    return (
+      <div>
+        <select className=" selectSm" onChange={(e) => ({ ...state, isWeightSelected: true, wieight: +e.target.value })}>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="250">250</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+        {state?.isWeightSelected ? <input type="number" className="" onChange={(e) => ({ ...state, variantPrice: +e.target.value })} /> : <></>}
+      </div>
+    );
+  };
 
-
-  React.useEffect(()=>{
-    for(let i=0;i<state.variantCount;i++){
-      state.variants.push(<Variants key={i} />)
+  React.useEffect(() => {
+    for (let i = 0; i < state.variantCount; i++) {
+      state.variants.push(<Variants key={i} />);
     }
-  },[state.variantCount])
-
+  }, [state.variantCount]);
 
   return (
     <div className="row">
@@ -77,63 +66,28 @@ const [state,setState]=React.useState<any>({
         <FormLayout title="Add Category">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup label="Name" errors={errors}>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Category name"
-                {...register('name', { required: true })}
-              />
-              <small className="text-danger">
-                {errors.name && <span>This field is required</span>}
-              </small>
+              <input type="text" className="form-control" placeholder="Category name" {...register('name', { required: true })} />
+              <small className="text-danger">{errors.name && <span>This field is required</span>}</small>
             </FormGroup>
 
             <FormGroup label="Sale Price" errors={errors}>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Sale price"
-                {...register('name', { required: true })}
-              />
-              <small className="text-danger">
-                {errors.name && <span>This field is required</span>}
-              </small>
+              <input type="number" className="form-control" placeholder="Sale price" {...register('name', { required: true })} />
+              <small className="text-danger">{errors.name && <span>This field is required</span>}</small>
             </FormGroup>
 
             <FormGroup label="Purchase Price" errors={errors}>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Purchase price"
-                {...register('name', { required: true })}
-              />
-              <small className="text-danger">
-                {errors.name && <span>This field is required</span>}
-              </small>
+              <input type="number" className="form-control" placeholder="Purchase price" {...register('name', { required: true })} />
+              <small className="text-danger">{errors.name && <span>This field is required</span>}</small>
             </FormGroup>
 
             <FormGroup label="Stock" errors={errors}>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Stock"
-                {...register('name', { required: true })}
-              />
-              <small className="text-danger">
-                {errors.name && <span>This field is required</span>}
-              </small>
+              <input type="number" className="form-control" placeholder="Stock" {...register('name', { required: true })} />
+              <small className="text-danger">{errors.name && <span>This field is required</span>}</small>
             </FormGroup>
 
             <FormGroup label="Description" errors={errors}>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Description"
-                {...register('description', { required: true })}
-              />
-              <small className="text-danger">
-                {errors.description && <span>This field is required</span>}
-              </small>
+              <input type="text" className="form-control" placeholder="Description" {...register('description', { required: true })} />
+              <small className="text-danger">{errors.description && <span>This field is required</span>}</small>
             </FormGroup>
             <FormGroup label="Image" errors={errors}>
               <input
@@ -143,19 +97,15 @@ const [state,setState]=React.useState<any>({
                 placeholder="Description"
                 {...register('coverImage', { required: true })}
               />
-              <small className="text-danger">
-                {errors.coverImage && <span>This field is required</span>}
-              </small>
+              <small className="text-danger">{errors.coverImage && <span>This field is required</span>}</small>
             </FormGroup>
-            <button type="button" onClick={()=>setState(()=>({...state,variantCount:state.variantCount+1}))}>add variant</button>
+            <button type="button" onClick={() => setState(() => ({ ...state, variantCount: state.variantCount + 1 }))}>
+              add variant
+            </button>
             <div id="variants" ref={variantWrapperDiv}>
-            {state.variants&&state.variants}
+              {state.variants && state.variants}
             </div>
-            <button
-              className=" btn btn-sm btn-success"
-              type="submit"
-              style={{ width: '200px' }}
-            >
+            <button className=" btn btn-sm btn-success" type="submit" style={{ width: '200px' }}>
               Add
             </button>
           </form>

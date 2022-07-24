@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react'; // importing FunctionComponent
 import dataServer from '../../../../services/axios.config';
-import { DataGrid ,} from '@mui/x-data-grid';
 import { IProduct } from '../../../../types/product';
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
 
@@ -46,22 +45,15 @@ const AllProducts: FunctionComponent<IAllProducts> = (props) => {
     { field: 'isAvaialible', headerName: 'isAvaialible', width: 150 },
     { field: 'isDeleted', headerName: 'isDeleted', width: 150 },
     { field: 'price', headerName: 'price', width: 150 },
-  ]
+  ];
 
   return (
-    
     <div style={{ height: 300, width: '100%' }}>
-    <DataGrid
-    rows={products}
-    columns={columns}
-    pageSize={5}
-    rowsPerPageOptions={[5]}
-    checkboxSelection
-      />
-      </div>)
-}
-
+      {/* <DataGrid rows={products} columns={columns} pageSize={5} rowsPerPageOptions={[5]} checkboxSelection /> */}
+    </div>
+  );
+};
 
 AllProducts.Layout = AdminLayout;
 
-export default AllProducts
+export default AllProducts;

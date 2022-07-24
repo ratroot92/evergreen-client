@@ -11,16 +11,17 @@ const dataServer:any = axios.create({
 })
 
 dataServer.interceptors.request.use(request => {
-  console.log("%c**** -- interceptors.request start -- ****", 'color:red;font-weight:bold;font-size:12px;')
-  console.log("%crequest.URL",'color:red;font-weight:bold')
+  console.log("%c interceptors.request start", 'color:orange;font-size:12px;')
   console.log(request.baseURL+request.url)
   const accessToken = localStorage.getItem("accessToken")
-  if (accessToken !== "null") {
+  if (accessToken !== "null" && accessToken !== null) {
+    console.log("%c token atatched from localStorage", 'color:orange;font-size:12px;')
+    console.log(accessToken)
     request.headers["accessToken"] = accessToken;
 
 
   }
-  console.log("%c**** -- interceptors.request end -- ****",'color:red;font-weight:bold;font-size:12px;')
+  console.log("%c interceptors.request end",'color:orange;font-size:12px;')
   
   return request
 
@@ -31,12 +32,10 @@ dataServer.interceptors.request.use(request => {
 )
 
 dataServer.interceptors.response.use(response => {
-  console.log("%c**** -- interceptors.response start -- ****",'color:green;font-weight:bold;font-size:12px;')
-  console.log("%cresponse.data.data",'color:green;font-weight:bold')
+  console.log("%c interceptors.response start",'color:green;font-size:12px;')
   console.log(response.data.data)
-  console.log("%cresponse.data.accessToken",'color:green;font-weight:bold')
   console.log(response.data.accessToken) 
-  console.log("%c**** -- interceptors.response end -- ****",'color:green;font-weight:bold;font-size:12px;')
+  console.log("%c interceptors.response end",'color:green;font-size:12px;')
   localStorage.setItem("accessToken",response.data.accessToken)
 return response
 
@@ -44,10 +43,18 @@ return response
 error => {
   if (error.response) {
      if (error.response.status === 401 ) {
-      localStorage.setItem("accessToken", JSON.stringify(null))
-    }
+       localStorage.clear()
     return Promise.reject({status:error.response.status,message:error.response.data.message})
-  
+       
+     }
+   else if (error.response.status === 422) {
+    return Promise.reject({status:error.response.status,message:error.response.data.errors[0].message})
+       
+    }
+     else {
+    return Promise.reject({status:error.response.status,message:error.response.data.message})
+       
+  }
   }
   else {
     return Promise.reject(error)
