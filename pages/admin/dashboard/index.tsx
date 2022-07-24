@@ -42,7 +42,9 @@ function AdminDashboard() {
         toast(`Service '${service}' not found.`);
       }
     } catch (err: any) {
-      toast(err.message);
+      if (err.response) {
+        toast(err.response.data.message);
+      }
     } finally {
       setState({ ...state, loading: false });
     }

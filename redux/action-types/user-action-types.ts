@@ -1,5 +1,5 @@
 
-import { User } from './User';
+import { IUser } from '../types/user-type';
 
 
 export const ADD_USER = 'ADD_USER';
@@ -9,27 +9,23 @@ export const EDIT_USER = 'EDIT_USER';
 
 export interface ADD_USER_ACTION {
   type: typeof ADD_USER;
-  user: User;
+  user: IUser;
 }
 
 export interface EDIT_USER_ACTION {
   type: typeof EDIT_USER;
-  user: User;
+  user: IUser;
 }
 
 export interface DELETE_USER_ACTION {
   type: typeof DELETE_USER;
-  id: string;
+  _id: string;
 }
 
 export interface SET_USERS_ACTION {
   type: typeof SET_USERS;
-  users: User[];
+  users: IUser[];
 }
-
-/**
- * USER TYPES END
- */
 
 
 export type UserTypes =
@@ -39,4 +35,3 @@ export type UserTypes =
   | SET_USERS_ACTION;
 
 
-export type AppActions = UserTypes;

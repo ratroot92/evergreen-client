@@ -12,17 +12,21 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthProvider from '../context/AuthProvider';
 import UserLayout from '../components/Layouts/UserLayout';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store/configureStore';
 function EvergreenApp({ Component, pageProps }: any) {
   const Layout = Component.Layout ? AdminLay : UserLay;
   return (
-    <AuthProvider>
-      <AppProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <ToastContainer />
-      </AppProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <AppProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+          <ToastContainer />
+        </AppProvider>
+      </AuthProvider>
+    </Provider>
   );
 }
 const UserLay = ({ children }: any) => <UserLayout>{children}</UserLayout>;

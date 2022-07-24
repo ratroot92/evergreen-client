@@ -1,49 +1,38 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
 import ReactLoader from '../../../../components/Loader/ReactLoading';
-import { AuthContext } from '../../../../context/AuthProvider';
 import dataServer from '../../../../services/axios.config';
-
-function AllUsers(props: any) {
-  const [state, setState] = React.useState({ loading: true, users: [] });
-  const authContext = React.useContext(AuthContext);
+import { useSelector, useDispatch } from 'react-redux';
+import { startDeleteUser, startSetUser } from '../../../../redux/actions/user-actions';
+import { startSetLoader } from '../../../../redux/actions/loader-actions';
+import { RootState } from '../../../../redux/store/configureStore';
+function AllUsers() {
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.users);
+  const loading = useSelector((state: RootState) => state.loading);
 
   React.useEffect(() => {
-    (async () => {
-      try {
-        dataServer.defaults.baseURL = 'http://0.0.0.0:8002/api';
-        const response = await dataServer.get(`/user`);
-        const users = response.data.data;
-        setState({ ...state, users: users, loading: false });
-      } catch (err) {
-        setState({ ...state, users: [], loading: false });
-      }
-    })();
+    dispatch(startSetLoader(true));
+    dispatch(startSetUser());
+    dispatch(startSetLoader(false));
   }, []);
 
-  async function handleEdit(e: any) {
-    console.log(e.target.id);
-  }
+  async function handleEdit(e: any) {}
 
   async function handleDelete(e: any) {
     try {
-      setState({ ...state, loading: true });
-      dataServer.defaults.baseURL = 'http://0.0.0.0:8002/api';
-      const requestPayload = { data: { _id: e.target.id } };
-      await dataServer.delete(`/user`, requestPayload);
-      console.log(state.users.filter(({ _id }) => _id !== e.target.id));
-      setState({ ...state, users: state.users.filter(({ _id }) => _id !== e.target.id) });
+      dispatch(startSetLoader(true));
+      dispatch(startDeleteUser(e.target.id));
+      dispatch(startSetLoader(false));
     } catch (err: any) {
       toast(err.message);
-    } finally {
-      setState({ ...state, loading: false });
     }
   }
 
   return (
     <div className="row">
-      {state.loading ? (
+      {loading ? (
         <ReactLoader></ReactLoader>
       ) : (
         <div className="col-md-12">
@@ -60,7 +49,7 @@ function AllUsers(props: any) {
               </tr>
             </thead>
             <tbody>
-              {state.users?.map((user: any, index: Number) => {
+              {users?.map((user: any, index: Number) => {
                 return (
                   <tr key={user?._id}>
                     <th scope="row">{++index}</th>
