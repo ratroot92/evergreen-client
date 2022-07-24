@@ -3,18 +3,18 @@ import { toast } from 'react-toastify';
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
 import ReactLoader from '../../../../components/Loader/ReactLoading';
 import { useSelector, useDispatch } from 'react-redux';
-import { startDeleteUser, startSetUser } from '../../../../redux/actions/user-actions';
 import { startSetLoader } from '../../../../redux/actions/loader-actions';
 import { RootState } from '../../../../redux/store/configureStore';
-import { IUser } from '../../../../redux/types/user-type';
-function AllUsers() {
+import { startDeleteRole, startSetRoles } from '../../../../redux/actions/role-actions';
+import { IRole } from '../../../../redux/types/roles-type';
+function AllRoles() {
   const dispatch = useDispatch();
-  const users: IUser[] = useSelector((state: RootState) => state.users);
+  const roles: IRole[] = useSelector((state: RootState) => state.roles);
   const loading: boolean = useSelector((state: RootState) => state.loading);
 
   React.useEffect(() => {
     dispatch(startSetLoader(true));
-    dispatch(startSetUser());
+    dispatch(startSetRoles());
     dispatch(startSetLoader(false));
   }, []);
 
@@ -23,7 +23,7 @@ function AllUsers() {
   async function handleDelete(e: any) {
     try {
       dispatch(startSetLoader(true));
-      dispatch(startDeleteUser(e.target.id));
+      dispatch(startDeleteRole(e.target.id));
       dispatch(startSetLoader(false));
     } catch (err: any) {
       toast(err.message);
@@ -40,23 +40,16 @@ function AllUsers() {
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">Email</th>
-                <th scope="col">Mobile</th>
-                <th scope="col">Role</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
+                <th scope="col">Name</th>
               </tr>
             </thead>
             <tbody>
-              {users?.map((user: any, index: Number) => {
+              {roles?.map((user: any, index: Number) => {
                 return (
                   <tr key={user?._id}>
                     <th scope="row">{++index}</th>
-                    <td>{user?.username}</td>
-                    <td>{user?.email}</td>
-                    <td>{user?.mobile}</td>
-                    <td>{user?.role?.name || 'role'}</td>
+                    <td>{user?.name}</td>
+
                     <td>
                       <span id={user?._id} className="btn btn-sm btn-success" onClick={handleEdit}>
                         edit
@@ -78,6 +71,6 @@ function AllUsers() {
   );
 }
 
-AllUsers.Layout = AdminLayout;
+AllRoles.Layout = AdminLayout;
 
-export default AllUsers;
+export default AllRoles;

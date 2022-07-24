@@ -36,6 +36,29 @@ const adminSidebarData = [
     ],
   },
   {
+    title: 'Roles',
+    path: '/admin/role',
+    icon: <FaIcons.FaCartPlus color="white" />,
+    iconClosed: <RiIcons.RiArrowDownSFill color="white" />,
+    iconOpened: <RiIcons.RiArrowUpSFill color="white" />,
+    subNav: [
+      {
+        title: 'Add Role',
+        path: '/admin/role/add',
+        icon: <FaIcons.FaCartPlus color="white" />,
+        iconClosed: <RiIcons.RiArrowDownSFill color="white" />,
+        iconOpened: <RiIcons.RiArrowUpSFill color="white" />,
+      },
+      {
+        title: 'All Roles',
+        path: '/admin/role/all',
+        icon: <FaIcons.FaCartPlus color="white" />,
+        iconClosed: <RiIcons.RiArrowDownSFill color="white" />,
+        iconOpened: <RiIcons.RiArrowUpSFill color="white" />,
+      },
+    ],
+  },
+  {
     title: 'Products',
     path: '/admin/product',
     icon: <FaIcons.FaCartPlus color="white" />,

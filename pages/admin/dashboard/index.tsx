@@ -3,14 +3,14 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import AdminLayout from '../../../components/Layouts/AdminLayout';
 import ReactLoader from '../../../components/Loader/ReactLoading';
-import dataServer from '../../../services/axios.config';
+import { AUTH_SERVICE_API_URL, USER_SERVICE_API_URL } from '../../../constant/constant';
 
 function AdminDashboard() {
   const [state, setState] = React.useState({
     allServices: [
       {
         name: 'user-microserice',
-        localUrl: 'http://localhost:8002/api',
+        localUrl: USER_SERVICE_API_URL,
         seeders: [
           { name: 'role', url: '/role/seed' },
           { name: 'user', url: '/user/seed' },
@@ -18,7 +18,7 @@ function AdminDashboard() {
       },
       {
         name: 'auth-microserice',
-        localUrl: 'http://localhost:8001/api',
+        localUrl: AUTH_SERVICE_API_URL,
         seeders: {},
       },
     ],

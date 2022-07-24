@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dispatch } from 'redux';
+import { USER_SERVICE_API_URL } from '../../constant/constant';
 import dataServer from '../../services/axios.config';
 import { AppActions } from '../action-types';
 import { ADD_USER, DELETE_USER, EDIT_USER, SET_USERS } from '../action-types/user-action-types';
@@ -57,7 +58,7 @@ export const startAddUser = (userData: {
 
 export const startDeleteUser = (_id: string) => {
   return (dispatch: Dispatch<AppActions>, getState: () => AppState) => {
-    dataServer.defaults.baseURL = 'http://0.0.0.0:8002/api';
+    dataServer.defaults.baseURL = USER_SERVICE_API_URL;
     dataServer
       .delete(`/user`, { data: { _id } })
       .then((response: any) => dispatch(deleteUser(response.data.data)))
@@ -73,7 +74,7 @@ export const startEditUser = (user: IUser) => {
 
 export const startSetUser = () => {
   return (dispatch: Dispatch<AppActions>, getState: () => AppState) => {
-    dataServer.defaults.baseURL = 'http://0.0.0.0:8002/api';
+    dataServer.defaults.baseURL = USER_SERVICE_API_URL;
     dataServer
       .get(`/user`)
       .then((response: any) => dispatch(setUser(response.data.data)))
