@@ -12,6 +12,7 @@ import AdminOtp from './pages/admin/otp';
 import store from './redux/store/store';
 import { Provider } from 'react-redux';
 import AdminRoute from './hoc/AdminRoute';
+import { startSetAuthenticated } from './redux/actions/auth-actions';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

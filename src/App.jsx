@@ -2,24 +2,50 @@
 import React from 'react';
 import Navbar from './components/Navbar/Navbar';
 import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminLogin from './pages/admin/login';
 import AdminOtp from './pages/admin/otp';
+import { startSetAuthenticated } from './redux/actions/auth-actions';
+import ClipLoader from 'react-spinners/ClipLoader';
 
+const override = {
+  display: 'block',
+  margin: '0 auto',
+  borderColor: 'red',
+};
 export default function App() {
-  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    // dispatch(startSetAuthenticated());
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }, []);
+
+  const { login, otpVerified: otp, loading } = useSelector((state) => state.auth);
+
+  const NavigateAdmin = <Navigate to={'/admin'} />;
+  const NavigateAdminLogin = <Navigate to={'/admin/login'} />;
+  const NavigateAdminOtp = <Navigate to={'/admin/otp'} />;
+  const NavigateAdminDashboard = <Navigate to={'/admin'} />;
+
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route index element={auth.login && auth.otpVerified ? <Navigate to={'/admin'} /> : <HomePage />} />
-        <Route path="admin" element={<DashboardAdmin />}>
-          <Route path="login" element={!auth.login && !auth.otpVerified ? <AdminLogin /> : <Navigate to={'/admin/otp'} />} />
-          <Route path="otp" element={auth.login ? auth.otpVerified ? <Navigate to={'/admin'} /> : <AdminOtp /> : <Navigate to={'/admin/login'} />} />
-        </Route>
-        {/* <Route path="/admin/otp" element={<AdminOtp />} /> */}
-        <Route path="*" element={<RouteNotFound />} />
-      </Routes>
+      {loading ? (
+        <ClipLoader color={'#000'} loading={loading} cssOverride={override} size={150} />
+      ) : (
+        <>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={login && otp ? <Navigate to={'/admin'} /> : <HomePage />} />
+            <Route path="/admin" element={login ? otp ? <DashboardAdmin /> : <Navigate to={'/admin/otp'} /> : <Navigate to={'/admin/login'} />} />
+            <Route path="/admin/login" element={login ? otp ? NavigateAdminDashboard : NavigateAdminOtp : <AdminLogin />} />
+            <Route path="/admin/otp" element={login ? otp ? NavigateAdminDashboard : <AdminOtp /> : NavigateAdminLogin} />
+
+            <Route path="*" element={<RouteNotFound />} />
+          </Routes>
+        </>
+      )}
     </>
   );
 }

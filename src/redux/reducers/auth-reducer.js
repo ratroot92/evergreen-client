@@ -7,6 +7,7 @@ const initialState = {
     payload: null,
     type: null,
   },
+  loading: false,
 };
 const authReducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -16,6 +17,10 @@ const authReducer = (state = initialState, action = {}) => {
       return { ...state, loginPayload: action.payload };
     case 'SET_OTP':
       return { ...state, otpVerified: action.payload };
+    case 'SET_IS_AUTHECTICATED':
+      return { ...state, isAuthenticated: action.payload, otpVerified: action.payload, login: action.payload };
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
     default:
       return state;
   }

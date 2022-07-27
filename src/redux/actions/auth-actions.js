@@ -24,4 +24,20 @@ const startSetOtp = (payload) => async (dispatch) => {
   }
 };
 
-export { startSetLogin, startSetOtp };
+const startSetAuthenticated = () => async (dispatch) => {
+  try {
+    console.log('startSetAuthenticated');
+    console.log('startSetAuthenticated');
+    console.log('startSetAuthenticated');
+    console.log('startSetAuthenticated');
+
+    const response = await authServer.get(`/auth/isAuthenticated`);
+    if (response.status === 200) {
+      dispatch({ type: 'SET_IS_AUTHECTICATED', payload: true });
+    }
+  } catch (err) {
+    dispatch({ type: 'SET_IS_AUTHECTICATED', payload: false });
+  }
+};
+
+export { startSetLogin, startSetOtp, startSetAuthenticated };

@@ -12,19 +12,19 @@ export default function index() {
           <ul className="navbar-nav">
             <li className="nav-item p-2  badge ">
               <Link className="text-white" to="/admin">
-                Admin Dashboard
+                Dashboard
               </Link>
             </li>
 
             <li className="nav-item p-2  badge ">
               <Link className="text-white" to="/admin/login">
-                Admin Login
+                Login
               </Link>
             </li>
 
             <li className="nav-item p-2  badge ">
               <Link className="text-white" to="/admin/otp">
-                Admin Otp
+                Otp
               </Link>
             </li>
           </ul>
