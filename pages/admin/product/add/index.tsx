@@ -2,7 +2,7 @@ import React from 'react';
 import AdminLayout from '../../../../components/Layouts/AdminLayout';
 import { useForm } from 'react-hook-form';
 import FormLayout from '../../../../components/Layouts/FormLayout';
-import FormGroup from '../../../../components/Forms/FormGroup';
+import FormGroup from '../../../../components/Form/FormGroup';
 import { NotificationManager } from 'react-notifications';
 import dataServer from '../../../../services/axios.config';
 

@@ -14,7 +14,19 @@ import AuthProvider from '../context/AuthProvider';
 import UserLayout from '../components/Layouts/UserLayout';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store/configureStore';
+import { useDispatch } from 'react-redux';
+import { startSetLoader } from '../redux/actions/loader-actions';
+import { startSetRoles } from '../redux/actions/role-actions';
+import { startSetUser } from '../redux/actions/user-actions';
+
 function EvergreenApp({ Component, pageProps }: any) {
+  React.useEffect(() => {
+    store.dispatch(startSetLoader(true));
+    store.dispatch(startSetRoles());
+    store.dispatch(startSetUser());
+    store.dispatch(startSetLoader(false));
+  }, []);
+
   const Layout = Component.Layout ? AdminLay : UserLay;
   return (
     <Provider store={store}>
