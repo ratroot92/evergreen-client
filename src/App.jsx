@@ -37,7 +37,7 @@ export default function App() {
         <>
           <Navbar />
           <Routes>
-            <Route path="/" element={login && otp ? <Navigate to={'/admin'} /> : <HomePage />} />
+            <Route path="/" element={login && otp ? NavigateAdmin : <HomePage />} />
             <Route path="/admin" element={login ? otp ? <DashboardAdmin /> : <Navigate to={'/admin/otp'} /> : <Navigate to={'/admin/login'} />} />
             <Route path="/admin/login" element={login ? otp ? NavigateAdminDashboard : NavigateAdminOtp : <AdminLogin />} />
             <Route path="/admin/otp" element={login ? otp ? NavigateAdminDashboard : <AdminOtp /> : NavigateAdminLogin} />
