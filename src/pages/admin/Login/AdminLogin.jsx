@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable*/
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,9 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { startSetLogin } from '../../../redux/actions/auth-actions';
-
+import './AdminLogin.css';
+import backgroundImage from '../../../assets/images/admin_login.jpg';
+import { useNavigate } from 'react-router-dom';
 const useYupValidationResolver = (validationSchema) =>
   React.useCallback(
     async (data) => {
@@ -40,26 +42,20 @@ const useYupValidationResolver = (validationSchema) =>
 
 const validationSchema = yup.object({
   username: yup.string().email('Invalid email').required('Required'),
-  // .test('email', 'Email already in use', async function (value) {
-  //   try {
-  //     if (value === "") return false
-  //     const { msg, exists } = await validationService.isAdminEmailValid(value);
-  //     if (exists) return true;
-  //     return false;
-  //   } catch (err) {
-  //     return false;
-  //   }
-  // }),
   password: yup.string().min(8, 'Not allowed').max(25, 'Not allowed').required('Required'),
 });
-function AdminLogin() {
-  // const router = useRouter();
+function AdminLogin(props) {
+  let navigate = useNavigate();
   const dispatch = useDispatch();
-  const loginState = useSelector((state) => state.auth);
+  const { isLoginSuccessfull, isOtpVerified } = useSelector((state) => state.auth);
 
   React.useEffect(() => {
-    console.log('loginState ==>', loginState);
-  }, [loginState]);
+    if (isLoginSuccessfull && !isOtpVerified) {
+      return navigate('/admin/otp');
+    } else if (isLoginSuccessfull && isOtpVerified) {
+      return navigate('/admin/dashboard');
+    }
+  }, [isLoginSuccessfull]);
 
   const {
     register,
@@ -81,57 +77,59 @@ function AdminLogin() {
         payload: username,
         password,
       };
-      dispatch({ type: 'SET_LOGIN_TYPE', payload: { type: 1, payload: username } });
       dispatch(startSetLogin(requestPayload));
-      // toast(response.data.message);
     } catch (err) {
       toast(err.message);
-    } finally {
-      // setState({ ...state, loading: true });
     }
   };
 
   return (
     <div className="row ">
-      <div className="col-md-3" />
-      <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12  ">
-        <div className="card p-5 bg-dark">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <h1 className="text-white">Admin Login </h1>
-              </div>
-              <div className="col-md-12 mt-2 mb-2 ">
-                <label className="text-white  mb-2" htmlFor="username">
+      <div className="col-md-6  left-half-wrapper" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="row ">
+          <div className="col-md-12 g-center-r">
+            <h1>Evergreen</h1>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12  right-half-wrapper  ">
+        <div className="row">
+          <div className="col-md-12">
+            <h3 className="c-form-title">Login</h3>
+          </div>
+          <div className="col-md-12  ">
+            <form className="c-form-wrapper" onSubmit={handleSubmit(onSubmit)}>
+              <div className="c-input-wrapper">
+                <label className="c-label" htmlFor="username">
                   User Name
                 </label>
-                <input type="email" required className="form-control form-control-sm" placeholder="Bill" {...register('username')} />
+                <input type="email" required className="c-input " placeholder="Bill" {...register('username')} />
                 {errors?.username ? (
-                  <small className="text-danger">{errors.username.message}</small>
+                  <small className="c-input-error-invalid">{errors.username.message}</small>
                 ) : (
-                  <small className="text-success">valid!</small>
+                  <small className="c-input-error-valid">valid!</small>
                 )}
               </div>
 
-              <div className="col-md-12 mt-2 mb-2 ">
-                <label className="text-white  mb-2" htmlFor="password">
+              <div className="c-input-wrapper">
+                <label className="c-label" htmlFor="password">
                   Password
                 </label>
-                <input required className="form-control form-control-sm" type="password" {...register('password')} />
+                <input required className="c-input " type="password" {...register('password')} />
                 {errors?.password ? (
-                  <small className="text-danger">{errors.password.message}</small>
+                  <small className="c-input-error-invalid">{errors.password.message}</small>
                 ) : (
-                  <small className="text-success">valid!</small>
+                  <small className="c-input-error-valid">valid!</small>
                 )}
               </div>
-            </div>
-            <div className="col-md-12 text-center mt-5 mb-5 ">
-              <input type="submit" className="btn btn-sm btn-success" />
-            </div>
-          </form>
+              <div className="col-md-12 text-center  ">
+                <input type="submit" className="btn  btn-success" />
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-      <div className="col-md-3" />
     </div>
   );
 }

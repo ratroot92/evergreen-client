@@ -11,15 +11,15 @@ const authServer = axios.create({
 
 authServer.interceptors.request.use(
   (request) => {
-    console.log('%c interceptors.request start', 'color:orange;font-size:12px;');
-    console.log(request.baseURL + request.url);
+    // console.log('%c interceptors.request start', 'color:orange;font-size:12px;');
+    // console.log(request.baseURL + request.url);
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken !== 'null' && accessToken !== null) {
-      console.log('%c token atatched from localStorage', 'color:orange;font-size:12px;');
-      console.log(accessToken);
+      // console.log('%c token atatched from localStorage', 'color:orange;font-size:12px;');
+      // console.log(accessToken);
       request.headers.accessToken = accessToken;
     }
-    console.log('%c interceptors.request end', 'color:orange;font-size:12px;');
+    // console.log('%c interceptors.request end', 'color:orange;font-size:12px;');
 
     return request;
   },
@@ -28,10 +28,10 @@ authServer.interceptors.request.use(
 
 authServer.interceptors.response.use(
   (response) => {
-    console.log('%c interceptors.response start', 'color:green;font-size:12px;');
-    console.log(response.data.data);
-    console.log(response.data.accessToken);
-    console.log('%c interceptors.response end', 'color:green;font-size:12px;');
+    // console.log('%c interceptors.response start', 'color:green;font-size:12px;');
+    // console.log(response.data.data);
+    // console.log(response.data.accessToken);
+    // console.log('%c interceptors.response end', 'color:green;font-size:12px;');
     localStorage.setItem('accessToken', response.data.accessToken);
     return response;
   },

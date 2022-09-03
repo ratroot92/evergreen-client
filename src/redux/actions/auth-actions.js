@@ -1,43 +1,52 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/prefer-default-export */
 import authServer from '../../config/axios.config';
+import { startLoading, stopLoading } from './ui-actions';
 
 const startSetLogin = (payload) => async (dispatch) => {
   try {
+    dispatch(startLoading());
     const response = await authServer.post(`/auth/login`, payload);
     if (response.status === 200) {
-      dispatch({ type: 'SET_LOGIN', payload: true });
+      dispatch({ type: 'SET_LOGIN_SUCCESS', payload });
+    } else {
+      dispatch({ type: 'SET_LOGIN_FAILED', payload: false });
     }
   } catch (err) {
-    dispatch({ type: 'SET_LOGIN', payload: false });
+    dispatch({ type: 'SET_LOGIN_FAILED', payload: false });
+  } finally {
+    dispatch(stopLoading());
   }
 };
 
 const startSetOtp = (payload) => async (dispatch) => {
   try {
+    dispatch(startLoading());
     const response = await authServer.post(`/auth/otp`, payload);
     if (response.status === 200) {
-      dispatch({ type: 'SET_OTP', payload: true });
+      dispatch({ type: 'SET_OTP_SUCCESS', payload: true });
+    } else {
+      dispatch({ type: 'SET_OTP_FAILED', payload: false });
     }
   } catch (err) {
-    dispatch({ type: 'SET_OTP', payload: false });
+    dispatch({ type: 'SET_OTP_FAILED', payload: false });
+  } finally {
+    dispatch(stopLoading());
   }
 };
 
-const startSetAuthenticated = () => async (dispatch) => {
+const startSetAuth = () => async (dispatch) => {
   try {
-    console.log('startSetAuthenticated');
-    console.log('startSetAuthenticated');
-    console.log('startSetAuthenticated');
-    console.log('startSetAuthenticated');
-
+    dispatch(startLoading());
     const response = await authServer.get(`/auth/isAuthenticated`);
     if (response.status === 200) {
-      dispatch({ type: 'SET_IS_AUTHECTICATED', payload: true });
+      dispatch({ type: 'SET_IS_LOGGED_SUCCESS', payload: true });
+    } else {
+      dispatch({ type: 'SET_IS_LOGGED_FAILED', payload: false });
     }
   } catch (err) {
-    dispatch({ type: 'SET_IS_AUTHECTICATED', payload: false });
+    dispatch({ type: 'SET_IS_LOGGED_FAILED', payload: false });
+  } finally {
+    dispatch(stopLoading());
   }
 };
 
-export { startSetLogin, startSetOtp, startSetAuthenticated };
+export { startSetLogin, startSetOtp, startSetAuth };

@@ -1,71 +1,71 @@
 /* eslint-disable  */
 import React from 'react';
 import Navbar from './components/Navbar/Navbar';
-import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { Routes, Route, Outlet, Navigate, useNavigate } from 'react-router-dom';
+import AdminLogin from './pages/admin/Login/AdminLogin';
+import AdminDashboard from './pages/admin/Dashboard/AdminDashboard';
+import AdminOtp from './pages/admin/Otp/AdminOtp';
 import { useDispatch, useSelector } from 'react-redux';
-import AdminLogin from './pages/admin/login';
-import AdminOtp from './pages/admin/otp';
-import { startSetAuthenticated } from './redux/actions/auth-actions';
-import ClipLoader from 'react-spinners/ClipLoader';
+import { ClipLoader } from 'react-spinners';
+import ProtectedRoutes from './hoc/AdminRoute';
+import { startSetAuth } from './redux/actions/auth-actions';
+
+function OtpProtectedRoutes({ element: Component, ...rest }) {
+  const { loginPayload, isLoginSuccessfull, isOtpVerified } = useSelector((state) => state.auth);
+  if (isLoginSuccessfull) {
+    return !isOtpVerified ? <Outlet /> : <Navigate to="/admin/dashboard" />;
+  } else {
+    return <Navigate to="/admin/login" />;
+  }
+}
 
 const override = {
   display: 'block',
   margin: '0 auto',
   borderColor: 'red',
 };
-export default function App() {
-  const dispatch = useDispatch();
 
+export default function App() {
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.ui);
+  let [color, setColor] = React.useState('#ffffff');
   React.useEffect(() => {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    // dispatch(startSetAuthenticated());
-    dispatch({ type: 'SET_LOADING', payload: false });
+    setTimeout(() => {
+      dispatch(startSetAuth());
+    }, 2000);
   }, []);
 
-  const { login, otpVerified: otp, loading } = useSelector((state) => state.auth);
-
-  const NavigateAdmin = <Navigate to={'/admin'} />;
-  const NavigateAdminLogin = <Navigate to={'/admin/login'} />;
-  const NavigateAdminOtp = <Navigate to={'/admin/otp'} />;
-  const NavigateAdminDashboard = <Navigate to={'/admin'} />;
-
   return (
-    <>
+    <div className="row">
       {loading ? (
-        <ClipLoader color={'#000'} loading={loading} cssOverride={override} size={150} />
+        <div className="row">
+          <div className="col-md-12">
+            <div className="g-center-r">
+              <ClipLoader color={color} loading={loading} cssOverride={override} size={800} />
+            </div>
+          </div>
+        </div>
       ) : (
-        <>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={login && otp ? NavigateAdmin : <HomePage />} />
-            <Route path="/admin" element={login ? otp ? <DashboardAdmin /> : <Navigate to={'/admin/otp'} /> : <Navigate to={'/admin/login'} />} />
-            <Route path="/admin/login" element={login ? otp ? NavigateAdminDashboard : NavigateAdminOtp : <AdminLogin />} />
-            <Route path="/admin/otp" element={login ? otp ? NavigateAdminDashboard : <AdminOtp /> : NavigateAdminLogin} />
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
 
-            <Route path="*" element={<RouteNotFound />} />
-          </Routes>
-        </>
+          <Route element={<OtpProtectedRoutes />}>
+            <Route path="/admin/otp" element={<AdminOtp />} />
+          </Route>
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+          </Route>
+
+          <Route path="*" element={<RouteNotFound />} />
+        </Routes>
       )}
-    </>
+
+      {/* <Navbar /> */}
+    </div>
   );
 }
-
-const HomePage = () => {
-  return (
-    <div>
-      <p className="text-white">HomePage</p>
-    </div>
-  );
-};
-
-const DashboardAdmin = () => {
-  return (
-    <div>
-      <p className="text-white">DashboardAdmin</p>
-      <Outlet />
-    </div>
-  );
-};
 
 const RouteNotFound = () => {
   return (
